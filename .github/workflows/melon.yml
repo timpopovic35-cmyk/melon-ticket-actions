@@ -2,16 +2,31 @@ name: Melon Ticket Check
 
 on:
   schedule:
-    - cron: '*/5 * * * *' # 5분마다 자동으로 멜론티켓을 확인합니다.
-  workflow_dispatch: # Actions 탭에 수동 실행 버튼을 만들어줍니다.
+    - cron: '*/5 * * * *' # 5분마다 자동으로 실행합니다.
+  workflow_dispatch: # 수동 실행 버튼을 활성화합니다.
 
 jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - name: Check Seat
+      # [첫 번째] 11월 14일 토요일 공연 감시
+      - name: Check Tickets (14th)
         uses: mooyoul/melon-ticket-actions@master
         with:
           product-id: ${{ secrets.PRODUCT_ID }}
+          schedule-id: 100001
+          seat-id: ${{ secrets.SEAT_ID }}
           slack-incoming-webhook-url: ${{ secrets.SLACK_INCOMING_WEBHOOK_URL }}
-          message: "🚨 멜론티켓 취소표 발생! 지금 즉시 예매하러 가세요!"
+          telegram-to: ${{ secrets.TELEGRAM_TO }}
+          message: "🚨 [14일 토요일] 취소표 발생! 지금 즉시 예매하러 가세요!"
+
+      # [두 번째] 11월 15일 일요일 공연 감시
+      - name: Check Tickets (15th)
+        uses: mooyoul/melon-ticket-actions@master
+        with:
+          product-id: ${{ secrets.PRODUCT_ID }}
+          schedule-id: 100002
+          seat-id: ${{ secrets.SEAT_ID }}
+          slack-incoming-webhook-url: ${{ secrets.SLACK_INCOMING_WEBHOOK_URL }}
+          telegram-to: ${{ secrets.TELEGRAM_TO }}
+          message: "🚨 [15일 일요일] 취소표 발생! 지금 즉시 예매하러 가세요!"
