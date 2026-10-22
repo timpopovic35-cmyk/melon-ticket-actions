@@ -1,0 +1,17 @@
+name: Melon Ticket Check
+
+on:
+  schedule:
+    - cron: '*/5 * * * *' # 5분마다 자동으로 멜론티켓을 확인합니다.
+  workflow_dispatch: # Actions 탭에 수동 실행 버튼을 만들어줍니다.
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Seat
+        uses: mooyoul/melon-ticket-actions@master
+        with:
+          product-id: ${{ secrets.PRODUCT_ID }}
+          slack-incoming-webhook-url: ${{ secrets.SLACK_INCOMING_WEBHOOK_URL }}
+          message: "🚨 멜론티켓 취소표 발생! 지금 즉시 예매하러 가세요!"
